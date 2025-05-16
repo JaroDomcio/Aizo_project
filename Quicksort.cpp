@@ -68,39 +68,41 @@ private:
 template<typename T>
 void testQuickSort(const string& typeName, PivotType pivotType) {
     QuickSort<T> sorter(pivotType);
-    const int tab[] = {50000, 100000, 200000, 500000, 750000, 1000000, 1500000};
+    const int tab[] = {1000000, 2000000, 5000000, 8000000, 10000000, 15000000, 20000000};
     const int k = 20;
 
     auto generate = [](int size) {
         T* arr = new T[size];
         for (int i = 0; i < size; i++) {
             if constexpr (is_same<T, int>::value)
-                arr[i] = rand() % 2147483647;
-            else
-                arr[i] = static_cast<T>(rand()) / RAND_MAX * 4294967296.0f;
+                arr[i] = ((rand() << 15) | rand()) % 2147483647;
+            else{
+                int r = (rand() << 15) | rand(); // 30-bitowa liczba losowa
+                arr[i] = static_cast<float>(r) / static_cast<float>((1 << 30)) * 4294967296.0f;
+            }
         }
         return arr;
     };
 
     cout << "\nTESTY QUICK SORT DLA TYPU: " << typeName << "\n";
 
-    //LOSOWA TABLICA
-    cout << "\nLosowa tablica" << endl;
-    for (int n : tab) {
-        double sumTime = 0;
-        cout << "n = " << n << endl;
-        for (int i = 0; i < k; i++) {
-            T* arr = generate(n);
+    // //LOSOWA TABLICA
+    // cout << "\nLosowa tablica" << endl;
+    // for (int n : tab) {
+    //     double sumTime = 0;
+    //     cout << "n = " << n << endl;
+    //     for (int i = 0; i < k; i++) {
+    //         T* arr = generate(n);
 
-            auto start = chrono::high_resolution_clock::now();
-            sorter.sort(arr, 0, n - 1);
-            auto end = chrono::high_resolution_clock::now();
+    //         auto start = chrono::high_resolution_clock::now();
+    //         sorter.sort(arr, 0, n - 1);
+    //         auto end = chrono::high_resolution_clock::now();
 
-            sumTime += chrono::duration<double>(end - start).count();
-            delete[] arr;
-        }
-        cout << "Average time: " << sumTime / k << " s" << endl;
-    }
+    //         sumTime += chrono::duration<double>(end - start).count();
+    //         delete[] arr;
+    //     }
+    //     cout << "Average time: " << sumTime / k << " s" << endl;
+    // }
 
     //ROSNĄCO 
     cout << "\nPosortowana rosnąca tablica" << endl;
@@ -140,45 +142,45 @@ void testQuickSort(const string& typeName, PivotType pivotType) {
         cout << "Average time: " << sumTime / k << " s" << endl;
     }
 
-    //POSORTOWANA W 33%
-    cout << "\nPosortowana w 33%" << endl;
-    for (int n : tab) {
-        double sumTime = 0;
-        cout << "n = " << n << endl;
-        for (int i = 0; i < k; i++) {
-            T* arr = generate(n);
-            int sortedPortion = static_cast<int>(n * 0.33);
-            sort(arr, arr + sortedPortion);
+    // //POSORTOWANA W 33%
+    // cout << "\nPosortowana w 33%" << endl;
+    // for (int n : tab) {
+    //     double sumTime = 0;
+    //     cout << "n = " << n << endl;
+    //     for (int i = 0; i < k; i++) {
+    //         T* arr = generate(n);
+    //         int sortedPortion = static_cast<int>(n * 0.33);
+    //         sort(arr, arr + sortedPortion);
 
-            auto start = chrono::high_resolution_clock::now();
-            sorter.sort(arr, 0, n - 1);
-            auto end = chrono::high_resolution_clock::now();
+    //         auto start = chrono::high_resolution_clock::now();
+    //         sorter.sort(arr, 0, n - 1);
+    //         auto end = chrono::high_resolution_clock::now();
 
-            sumTime += chrono::duration<double>(end - start).count();
-            delete[] arr;
-        }
-        cout << "Average time: " << sumTime / k << " s" << endl;
-    }
+    //         sumTime += chrono::duration<double>(end - start).count();
+    //         delete[] arr;
+    //     }
+    //     cout << "Average time: " << sumTime / k << " s" << endl;
+    // }
 
-    //POSORTOWANA W 66%
-    cout << "\nPosortowana w 66%" << endl;
-    for (int n : tab) {
-        double sumTime = 0;
-        cout << "n = " << n << endl;
-        for (int i = 0; i < k; i++) {
-            T* arr = generate(n);
-            int sortedPortion = static_cast<int>(n * 0.66);
-            sort(arr, arr + sortedPortion);
+    // //POSORTOWANA W 66%
+    // cout << "\nPosortowana w 66%" << endl;
+    // for (int n : tab) {
+    //     double sumTime = 0;
+    //     cout << "n = " << n << endl;
+    //     for (int i = 0; i < k; i++) {
+    //         T* arr = generate(n);
+    //         int sortedPortion = static_cast<int>(n * 0.66);
+    //         sort(arr, arr + sortedPortion);
 
-            auto start = chrono::high_resolution_clock::now();
-            sorter.sort(arr, 0, n - 1);
-            auto end = chrono::high_resolution_clock::now();
+    //         auto start = chrono::high_resolution_clock::now();
+    //         sorter.sort(arr, 0, n - 1);
+    //         auto end = chrono::high_resolution_clock::now();
 
-            sumTime += chrono::duration<double>(end - start).count();
-            delete[] arr;
-        }
-        cout << "Average time: " << sumTime / k << " s" << endl;
-    }
+    //         sumTime += chrono::duration<double>(end - start).count();
+    //         delete[] arr;
+    //     }
+    //     cout << "Average time: " << sumTime / k << " s" << endl;
+    // }
 }
 
 
@@ -233,7 +235,7 @@ int main() {
     do {
         cout << "\n========== MENU ==========\n";
         cout << "1. Sortowanie tablicy z pliku 'dane.txt'\n";
-        cout << "2. Testy QuickSort (int, float, pivot = MIDDLE)\n";
+        cout << "2. Testy QuickSort (int, float, pivot = R)\n";
         cout << "0. Wyjście\n";
         cout << "Wybierz opcję: ";
         cin >> option;
@@ -243,8 +245,8 @@ int main() {
                 demoSortUI();
                 break;
             case 2:
-                testQuickSort<int>("int", MIDDLE);
-                testQuickSort<float>("float", MIDDLE);
+                testQuickSort<int>("int", RANDOM);
+                testQuickSort<float>("float", RANDOM);
                 break;
             case 0:
                 cout << "Zamykanie programu...\n";

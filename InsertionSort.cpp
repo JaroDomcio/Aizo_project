@@ -30,7 +30,7 @@ public:
 template<typename T>
 void testInsertionSort(const string& typeName) {
     InsertionSort<T> sorter;
-    const int tab[] = {1000000, 2000000, 5000000,8000000, 10000000, 15000000,20000000};
+    const int tab[] = {10000, 20000, 50000,80000, 100000, 150000,200000};
     const int k = 20;
 
     auto generate = [](int size) {

@@ -36,7 +36,7 @@ public:
 template<typename T>
 void testShellSortFrankLazarus(const string& typeName) {
     ShellSortFrankLazarus<T> sorter;
-    const int tab[] = {50000, 100000, 200000, 500000, 750000, 1000000, 1500000};
+    const int tab[] = {1000000, 2000000, 5000000, 8000000, 10000000, 15000000, 20000000};
     const int k = 20;
 
     auto generate = [](int size) {

@@ -30,19 +30,20 @@ public:
 template<typename T>
 void testShellSort(const string& typeName) {
     ShellSort<T> sorter;
-    const int tab[] = {50000, 100000, 200000, 500000, 750000, 1000000, 1500000};
+    const int tab[] = {1000000, 2000000, 5000000, 8000000, 10000000, 15000000, 20000000};
     const int k = 20;
 
     auto generate = [](int size) {
         T* arr = new T[size];
         for (int i = 0; i < size; i++) {
             if constexpr (is_same<T, int>::value)
-                arr[i] = rand() % 2147483647;
+                arr[i] = ((rand() << 15) | rand()) % 2147483647;
             else
                 arr[i] = static_cast<T>(rand()) / RAND_MAX * 4294967296.0f;
         }
         return arr;
     };
+    
 
     cout << "\nTESTY SHELL SORT DLA TYPU: " << typeName << "\n";
 

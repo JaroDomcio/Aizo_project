@@ -54,12 +54,15 @@ void testHeapSort(const string& typeName) {
         T* arr = new T[size];
         for (int i = 0; i < size; i++) {
             if constexpr (is_same<T, int>::value)
-                arr[i] = rand() % 2147483647;
-            else
-                arr[i] = static_cast<T>(rand()) / RAND_MAX * 4294967296.0f;
+                arr[i] = ((rand() << 15) | rand()) % 2147483647;
+            else{
+                int r = (rand() << 15) | rand(); // 30-bitowa liczba losowa
+                arr[i] = static_cast<float>(r) / static_cast<float>((1 << 30)) * 4294967296.0f;
+            }
         }
         return arr;
     };
+    
 
     cout << "\n=== TESTY HEAP SORT DLA TYPU: " << typeName << " ===\n";
 
